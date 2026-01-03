@@ -1,0 +1,155 @@
+name: РИТМ
+icon: null
+gesUrl: https://ges.ritm.digital
+authMethods:
+  - sso
+  - guest_mail
+wordTemplates: []
+source:
+  type: GitLab
+  url: https://itsmf.gitlab.yandexcloud.net
+  repos:
+    - ritm-authors/0-0-foundation
+    - ritm-authors/0-2-glossary
+    - ritm-authors/0-4-FAQ
+    - ritm-authors/project-definition
+sections:
+  0-main-ritm:
+    title: 0. Основы РИТМ
+    description: ''
+    icon: ''
+    catalogs:
+      - project-definition
+      - 0-2-glossary
+      - 0-0-foundation
+      - 0-4-FAQ
+    view: section
+  1-ritm-strategiya-i-upravlenie-it:
+    title: 1. РИТМ.Стратегия и управление ИТ
+    description: null
+    view: section
+    icon: crown
+    catalogs:
+      - 1-1-razrabotka-strategii-it
+      - 1-2-upravlenie-portfelyami-programmami-it-proektov
+      - 1-3-praktika-planirovanie-i-provedenie-organizacionnyh-izmenenii-v-it
+      - 1-4-upravlenie-kompetenciyami-i-razvitie-talantov-v-it
+      - 1-5-upravlenie-it-processami
+      - 1-6-upravlenie-it-postavshikami
+      - 1-7-upravlenie-biznes-trebovaniyami
+      - 1-8-upravlenie-it-proektami
+      - 1-9-monitoring-ispolneniya-strategii
+    sections: {}
+  2-itam:
+    title: 2. РИТМ.Активы
+    description: null
+    view: section
+    icon: monitor-cog
+    catalogs:
+      - 2-0-foundation
+      - 2-1-asset-strategy
+      - 2-2-catalogs-reports
+      - 2-3-unify
+      - 2-4-utilization
+      - 2-5-1-sam
+      - 2-5-2-ham
+      - 2-6-compliance
+      - 2-7-acquisition
+      - 2-8-contracts
+      - 2-9-inventory
+    sections: {}
+  3-ritm-arhitektura:
+    title: 3. РИТМ.Архитектура
+    description: ''
+    icon: ''
+    catalogs:
+      - 3-0-osnovy
+      - 3-1-razrabotka-videniya-arhitektury
+      - 3-2-ritm-dannye
+      - 3-3-arhitekturnyi-nadzor
+      - 3-4-arhitekturnyi-komitet
+      - 3-5-upravlenie-arhitekturnym-repozitoriem
+      - 3-6-issledovaniya-reshenii-i-tehnologii
+      - 3-7-razrabotka-i-aktualizaciya-standartov
+      - 3-8-razrabotka-it-arhitektury
+      - 3-9-provedenie-audita
+    view: section
+  4-ritm-finansy:
+    title: 4. РИТМ. Финансы
+    description: null
+    view: section
+    icon: hand-coins
+    catalogs:
+      - 4-1-upravlenie-finansovoi-politikoi-v-it
+      - 4-2-budzhetirovanie
+      - 4-3-postroenie-finansovyh-modelei-i-prognozirovanie
+      - 4-4-arhiv-upravlenie-denezhnymi-sredstvami
+      - 4-5-razrabotka-i-formirovanie-upravlencheskoi-finansovoi-otchetnosti
+      - 4-6-upravlenie-finansovymi-riskami
+      - 4-7-upravlenie-metodikoi-rascheta-sebestoimosti-it-produktov-i-it-uslug
+      - 4-8-formirovanie-i-kontrol-stoimosti-it-proektov
+      - >-
+        4-9-opredelenie-i-kontrol-pokazatelei-effektivnosti-finansovoi-deyatel-nosti-it
+    sections: {}
+  5-ritm-operacii:
+    title: 5. РИТМ.Операции
+    description: null
+    view: section
+    icon: null
+    catalogs: []
+    sections: {}
+  6-ritm-nadezhnost-:
+    title: 6. РИТМ. Надежность
+    description: null
+    view: section
+    icon: null
+    catalogs: []
+    sections: {}
+  7-products-services:
+    title: 7. РИТМ. ИТ-продукты и ИТ-услуги
+    description: null
+    view: section
+    icon: hand-platter
+    catalogs:
+      - 7-1-prod-serv-portfolio
+      - 7-2-rlm-slm
+      - 7-3-product-marketing
+      - 7-4-product-finance
+      - 7-5-lifecycle
+      - 7-6-cust-dev-market
+      - 7-7-hypo-test
+      - 7-8-product-design
+      - 7-9-metrics-control
+    sections: {}
+  8-ritm-proizvodstvo-produktov-i-uslug:
+    title: 8. РИТМ. Производство продуктов и услуг
+    description: null
+    view: section
+    icon: null
+    catalogs: []
+    sections: {}
+  9-ritm-postoyannoe-uluchshenie:
+    title: 9. РИТМ. Постоянное улучшение
+    description: null
+    view: section
+    icon: null
+    catalogs: []
+    sections: {}
+  10-automation:
+    title: 10. РИТМ.Автоматизация
+    description: ''
+    icon: database
+    catalogs:
+      - 10-0-foundation
+      - 10-1-strategy
+      - 10-2-assets
+      - 10-3-architecture
+      - 10-4-finance
+      - 10-5-operations
+      - 10-6-reliability
+      - 10-7-products-services
+      - 10-8-changes
+    view: section
+modules:
+  quiz: false
+pdfTemplates: []

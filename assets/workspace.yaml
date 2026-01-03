@@ -1,0 +1,25 @@
+# Пример конфигурационного файла workspace.yaml для проекта РИТМ
+workspace_dir: ~/ritm-workspace
+
+sections:
+  - name: "1-методология"
+    catalogs:
+      - name: "ritm-methodology"
+        source:
+          url: "https://gitlab.example.com"
+      - name: "ritm-processes"
+        source:
+          url: "https://gitlab.example.com"
+  
+  - name: "2-практики"
+    catalogs:
+      - name: "ritm-practices"
+        source:
+          url: "https://gitlab.example.com"
+  
+  - name: "3-инструменты"
+    catalogs:
+      - name: "ritm-tools"
+        source:
+          url: "https://gitlab.example.com"
+
