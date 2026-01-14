@@ -6,11 +6,79 @@ CLI инструмент для синхронизации и управлени
 
 **gramax-sync** — консольный инструмент для работы с множеством Git-репозиториев, определённых в конфигурационном файле `workspace.yaml`. Инструмент позволяет выполнять массовые операции clone, pull, commit, push для всех репозиториев проекта.
 
-## Установка
+## Требования
 
-### Для использования
+- **Python:** 3.10 или выше
+- **Git:** установленный и настроенный
+- **macOS/Linux/Windows:** поддерживаются все платформы
+
+### Проверка требований
 
 ```bash
+# Проверка версии Python
+python3 --version  # Должно быть 3.10+
+
+# Проверка Git
+git --version
+```
+
+## Установка
+
+### Вариант 1: Установка через uv (рекомендуется)
+
+[uv](https://github.com/astral-sh/uv) — современный, быстрый менеджер пакетов Python.
+
+#### Шаг 1: Установка uv
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Или через Homebrew (macOS)
+brew install uv
+
+# Windows (PowerShell)
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+После установки перезапустите терминал или выполните:
+```bash
+source ~/.bashrc  # или ~/.zshrc для zsh
+```
+
+#### Шаг 2: Клонирование и установка проекта
+
+```bash
+# Клонировать репозиторий
+git clone https://github.com/your-org/gramax-sync.git
+cd gramax-sync
+
+# Создать виртуальное окружение и установить зависимости
+uv venv
+source .venv/bin/activate  # macOS/Linux
+# или .venv\Scripts\activate  # Windows
+
+# Установить проект
+uv pip install -e .
+```
+
+#### Шаг 3: Проверка установки
+
+```bash
+# Проверить, что команда доступна
+gramax-sync --version
+
+# Проверить справку
+gramax-sync --help
+```
+
+### Вариант 2: Установка через pip
+
+```bash
+# Клонировать репозиторий
+git clone https://github.com/your-org/gramax-sync.git
+cd gramax-sync
+
 # Создать виртуальное окружение
 python3 -m venv .venv
 source .venv/bin/activate  # macOS/Linux
@@ -20,13 +88,20 @@ source .venv/bin/activate  # macOS/Linux
 pip install -e .
 ```
 
-### Для разработки
+### Вариант 3: Установка для разработки
 
 ```bash
 # Автоматическая настройка (рекомендуется)
 make setup
+source .venv/bin/activate
 
-# Или вручную:
+# Или вручную через uv:
+uv venv
+source .venv/bin/activate
+uv pip install -e ".[dev]"
+pre-commit install
+
+# Или вручную через pip:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip setuptools wheel
@@ -35,6 +110,62 @@ pre-commit install
 ```
 
 Подробнее см. [DEVELOPMENT.md](DEVELOPMENT.md)
+
+### Проверка установки
+
+После установки выполните следующие команды для проверки:
+
+```bash
+# 1. Проверка версии
+gramax-sync --version
+# Ожидаемый вывод: gramax-sync, version 0.1.0
+
+# 2. Проверка справки
+gramax-sync --help
+# Должен отобразиться список команд
+
+# 3. Проверка доступности всех команд
+gramax-sync auth --help
+gramax-sync clone --help
+gramax-sync status --help
+```
+
+### Устранение проблем установки
+
+#### Команда не найдена после установки
+
+```bash
+# Убедитесь, что виртуальное окружение активировано
+source .venv/bin/activate
+
+# Проверьте, что пакет установлен
+pip list | grep gramax-sync
+
+# Переустановите если нужно
+pip install -e .
+```
+
+#### Ошибка "Python version not supported"
+
+```bash
+# Проверьте версию Python
+python3 --version
+
+# Если версия < 3.10, установите новую версию:
+# macOS
+brew install python@3.11
+
+# Ubuntu/Debian
+sudo apt install python3.11
+```
+
+#### Проблемы с keyring на Linux
+
+```bash
+# Установите необходимые библиотеки
+sudo apt install libsecret-1-dev  # Ubuntu/Debian
+sudo dnf install libsecret-devel  # Fedora
+```
 
 ## Использование
 
@@ -62,6 +193,50 @@ gramax-sync init \
 
 **Важно:** Для репозитория конфигураций используется ветка `master` (по умолчанию), а для каталогов (репозиториев с кодом) — ветка `private`.
 
+### Работа с репозиториями
+
+```bash
+# Клонирование всех репозиториев
+gramax-sync clone
+
+# Статус всех репозиториев
+gramax-sync status
+
+# Обновление всех репозиториев
+gramax-sync pull
+
+# Коммит изменений (с автогенерацией сообщения)
+gramax-sync commit
+
+# Коммит с кастомным сообщением
+gramax-sync commit -m "Update documentation"
+
+# Отправка изменений
+gramax-sync push
+
+# Полная синхронизация (pull + commit + push)
+gramax-sync sync
+
+# Синхронизация с предварительным просмотром
+gramax-sync sync --dry-run
+```
+
+### Фильтрация по секциям и каталогам
+
+Все команды поддерживают glob-паттерны для фильтрации:
+
+```bash
+# Работа только с секциями, начинающимися на "1-"
+gramax-sync status --section "1-*"
+gramax-sync clone --section "1-методология"
+
+# Работа только с определёнными каталогами
+gramax-sync commit --catalog "ritm-*" -m "Fix typos"
+
+# Комбинация фильтров
+gramax-sync pull --section "1-*" --catalog "ritm-methodology"
+```
+
 ### Управление конфигурацией
 
 ```bash
@@ -83,28 +258,6 @@ gramax-sync edit remove --section "1-методология" --catalog "ritm-met
 
 # Обновление конфигурации с сервера
 gramax-sync update
-```
-
-### Работа с репозиториями
-
-```bash
-# Клонирование всех репозиториев
-gramax-sync clone
-
-# Статус всех репозиториев
-gramax-sync status
-
-# Обновление всех репозиториев
-gramax-sync pull
-
-# Коммит изменений (с автогенерацией сообщения)
-gramax-sync commit
-
-# Коммит с кастомным сообщением
-gramax-sync commit -m "Update documentation"
-
-# Коммит с фильтрацией
-gramax-sync commit --section "1-*" -m "Fix typos"
 ```
 
 ### Аутентификация
@@ -165,7 +318,7 @@ gramax-sync auth logout --url https://itsmf.gitlab.yandexcloud.net
 
 ## Конфигурация
 
-Конфигурация хранится в `~/.config/gramax-sync/config.yaml` (ранее использовался JSON формат, автоматически мигрируется) и создаётся автоматически при выполнении команды `init`.
+Конфигурация хранится в `~/.config/gramax-sync/config.yaml` и создаётся автоматически при выполнении команды `init`.
 
 Репозиторий с конфигурациями должен содержать файл `workspace.yaml`:
 
@@ -221,100 +374,21 @@ make check         # Проверить всё
 make clean         # Очистить временные файлы
 ```
 
-**Документация для разработчиков:**
+## Документация
+
 - [DEVELOPMENT.md](DEVELOPMENT.md) — Руководство по разработке
-- [ARCHITECTURE_PRINCIPLES.md](ARCHITECTURE_PRINCIPLES.md) — Универсальные правила архитектуры и принципы разработки
+- [ARCHITECTURE_PRINCIPLES.md](ARCHITECTURE_PRINCIPLES.md) — Принципы архитектуры
+- [ROADMAP.md](ROADMAP.md) — Дорожная карта развития
+- [OAUTH_SETUP.md](OAUTH_SETUP.md) — Настройка OAuth
+- [MCP_SETUP.md](MCP_SETUP.md) — MCP Server для Claude Desktop
+- [TOKEN_PERMISSIONS.md](TOKEN_PERMISSIONS.md) — Права токенов GitLab
+- [CLAUDE.md](CLAUDE.md) — Контекст для Claude Code
 
-## Статус разработки
+## MCP Server для Claude Desktop
 
-✅ **Проект готов к использованию!** — Все основные команды реализованы и протестированы
+**gramax-sync** включает MCP Server для интеграции с Claude Desktop.
 
-### Последние обновления (v0.1.0)
-
-- ✅ **Адаптация модели данных** под реальную структуру workspace.yaml (словарь sections, поддержка null значений)
-- ✅ **Автоматическая аутентификация** при клонировании репозиториев (токен добавляется в URL)
-- ✅ **Исправление пагинации** при получении дерева репозиториев (получение всех элементов)
-- ✅ **Команда изменения workspace_dir**: `gramax-sync edit set-workspace-dir`
-- ✅ **Улучшенная обработка ошибок** GitLab API (fallback на прямые HTTP запросы)
-- ✅ **Правильная передача URL** в python-gitlab (базовый URL + путь проекта)
-- ✅ **Обновление токена** в GitLabClient после сохранения
-
-### Этап 1.1: Настройка проекта и инфраструктуры ✅ ЗАВЕРШЁН
-
-### Этап 1.1: Настройка проекта и инфраструктуры ✅ ЗАВЕРШЁН
-
-- [x] Структура проекта и модули
-- [x] Конфигурация проекта (pyproject.toml)
-- [x] Виртуальное окружение и зависимости
-- [x] Инструменты разработки (black, ruff, mypy)
-- [x] Pre-commit hooks
-- [x] Тесты инфраструктуры (16 тестов, 100% покрытие)
-- [x] Документация по разработке
-
-### Этап 1.2: Customer Map и первоначальная настройка ✅ ЗАВЕРШЁН
-
-- [x] Документ Customer Map с описанием пользовательского пути
-- [x] Модуль для работы с GitLab API (проверка доступа, получение файлов)
-- [x] Парсер workspace.yaml (из файла и из строки)
-- [x] Модуль аутентификации (управление токенами через keyring)
-- [x] Интерактивный выбор секций/каталогов
-- [x] Команда `init` для первоначальной настройки
-- [x] Поддержка разных веток (main для конфигов, private для каталогов)
-- [x] Команда `edit` для редактирования локальной конфигурации
-- [x] Команда `update` для обновления конфигурации с сервера
-- [x] Управление локальной конфигурацией (LocalConfig, ConfigManager)
-- [x] Миграция конфигурации с JSON на YAML формат
-
-### Этап 1.3: Команды работы с репозиториями ✅ ЗАВЕРШЁН
-
-- [x] Команда `clone` — клонирование репозиториев
-- [x] Команда `status` — статус репозиториев
-- [x] Команда `pull` — обновление репозиториев
-
-### Этап 2.1: Команда commit ✅ ЗАВЕРШЁН
-
-- [x] Команда `commit` — массовый commit изменений
-- [x] Автогенерация сообщений коммитов
-- [x] Поддержка кастомных сообщений через `-m`
-- [x] Фильтрация по `--section` и `--catalog`
-
-### Этап 2.2: Команда push ✅ ЗАВЕРШЁН
-
-- [x] Команда `push` — отправка изменений в remote
-- [x] Поддержка force push с подтверждением
-- [x] Установка upstream для новых веток
-- [x] Фильтрация по `--section` и `--catalog`
-
-### Этап 2.3: Команда sync ✅ ЗАВЕРШЁН
-
-- [x] Команда `sync` — полная синхронизация (pull + commit + push)
-- [x] Dry-run режим для предварительного просмотра
-- [x] Условная логика (операции только при необходимости)
-- [x] Фильтрация по `--section` и `--catalog`
-
-### Этап 3.1: OAuth аутентификация ✅ ЗАВЕРШЁН
-
-- [x] OAuth аутентификация через браузер
-- [x] Команда `auth login` (OAuth и PAT)
-- [x] Команда `auth status` — статус аутентификации
-- [x] Команда `auth logout` — выход из системы
-- [x] Команда `auth refresh` — обновление токена
-- [x] Проверка валидности токенов
-
-### Этап 3.3: Расширенная конфигурация
-
-- [ ] Расширение LocalConfig новыми полями
-- [ ] Команда `config` для управления конфигурацией
-- [ ] Поддержка переменных окружения
-
-### Этап 4: MCP Server для Claude Desktop ✅ ЗАВЕРШЁН
-
-- [x] Базовая структура MCP сервера на базе fastmcp
-- [x] 7 MCP инструментов для работы с репозиториями
-- [x] Интеграция с существующим кодом
-- [x] Документация по настройке
-
-**Доступные MCP инструменты:**
+**Доступные инструменты:**
 - `list_repositories` — список секций и каталогов
 - `get_repository_status` — статус репозиториев
 - `clone_repositories` — клонирование
@@ -328,4 +402,3 @@ make clean         # Очистить временные файлы
 ## Лицензия
 
 MIT
-
