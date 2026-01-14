@@ -24,7 +24,7 @@ git --version
 
 ## Установка
 
-### Вариант 1: Установка через uv (рекомендуется)
+### Установка из PyPI (рекомендуется)
 
 [uv](https://github.com/astral-sh/uv) — современный, быстрый менеджер пакетов Python.
 
@@ -46,103 +46,56 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 source ~/.bashrc  # или ~/.zshrc для zsh
 ```
 
-#### Шаг 2: Клонирование и установка проекта
+#### Шаг 2: Установка gramax-sync
 
 ```bash
-# Клонировать репозиторий
-git clone https://github.com/your-org/gramax-sync.git
-cd gramax-sync
-
-# Создать виртуальное окружение и установить зависимости
-uv venv
-source .venv/bin/activate  # macOS/Linux
-# или .venv\Scripts\activate  # Windows
-
-# Установить проект
-uv pip install -e .
+# Установить из PyPI
+uv pip install gramax-sync
 ```
 
 #### Шаг 3: Проверка установки
 
 ```bash
 # Проверить, что команда доступна
-gramax-sync --version
+uv run gramax-sync --version
 
 # Проверить справку
-gramax-sync --help
+uv run gramax-sync --help
 ```
 
-### Вариант 2: Установка через pip
+### Установка для разработки
+
+Для разработки клонируйте репозиторий и установите в editable режиме:
 
 ```bash
 # Клонировать репозиторий
 git clone https://github.com/your-org/gramax-sync.git
 cd gramax-sync
 
-# Создать виртуальное окружение
-python3 -m venv .venv
-source .venv/bin/activate  # macOS/Linux
-# или .venv\Scripts\activate  # Windows
-
-# Установить проект
-pip install -e .
-```
-
-### Вариант 3: Установка для разработки
-
-```bash
 # Автоматическая настройка (рекомендуется)
 make setup
-source .venv/bin/activate
 
 # Или вручную через uv:
 uv venv
-source .venv/bin/activate
 uv pip install -e ".[dev]"
-pre-commit install
-
-# Или вручную через pip:
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip setuptools wheel
-pip install -e ".[dev]"
 pre-commit install
 ```
 
 Подробнее см. [DEVELOPMENT.md](DEVELOPMENT.md)
-
-### Проверка установки
-
-После установки выполните следующие команды для проверки:
-
-```bash
-# 1. Проверка версии
-gramax-sync --version
-# Ожидаемый вывод: gramax-sync, version 0.1.0
-
-# 2. Проверка справки
-gramax-sync --help
-# Должен отобразиться список команд
-
-# 3. Проверка доступности всех команд
-gramax-sync auth --help
-gramax-sync clone --help
-gramax-sync status --help
-```
 
 ### Устранение проблем установки
 
 #### Команда не найдена после установки
 
 ```bash
-# Убедитесь, что виртуальное окружение активировано
-source .venv/bin/activate
-
 # Проверьте, что пакет установлен
-pip list | grep gramax-sync
+uv pip list | grep gramax-sync
 
 # Переустановите если нужно
-pip install -e .
+uv pip install -e .
+
+# Проверьте работу через uv run
+uv run gramax-sync --version
 ```
 
 #### Ошибка "Python version not supported"
@@ -169,16 +122,19 @@ sudo dnf install libsecret-devel  # Fedora
 
 ## Использование
 
+> **Примечание:** Все команды в документации используют `uv run` для автоматического
+> запуска в виртуальном окружении без необходимости его активации.
+
 ### Первоначальная настройка
 
 Перед использованием необходимо выполнить первоначальную настройку:
 
 ```bash
 # Интерактивная настройка
-gramax-sync init
+uv run gramax-sync init
 
 # Или с параметрами
-gramax-sync init \
+uv run gramax-sync init \
   --repo-url https://itsmf.gitlab.yandexcloud.net/ritm-authors/gramax-yaml-manager \
   --branch master \
   --catalog-branch private
@@ -197,28 +153,28 @@ gramax-sync init \
 
 ```bash
 # Клонирование всех репозиториев
-gramax-sync clone
+uv run gramax-sync clone
 
 # Статус всех репозиториев
-gramax-sync status
+uv run gramax-sync status
 
 # Обновление всех репозиториев
-gramax-sync pull
+uv run gramax-sync pull
 
 # Коммит изменений (с автогенерацией сообщения)
-gramax-sync commit
+uv run gramax-sync commit
 
 # Коммит с кастомным сообщением
-gramax-sync commit -m "Update documentation"
+uv run gramax-sync commit -m "Update documentation"
 
 # Отправка изменений
-gramax-sync push
+uv run gramax-sync push
 
 # Полная синхронизация (pull + commit + push)
-gramax-sync sync
+uv run gramax-sync sync
 
 # Синхронизация с предварительным просмотром
-gramax-sync sync --dry-run
+uv run gramax-sync sync --dry-run
 ```
 
 ### Фильтрация по секциям и каталогам
@@ -227,37 +183,37 @@ gramax-sync sync --dry-run
 
 ```bash
 # Работа только с секциями, начинающимися на "1-"
-gramax-sync status --section "1-*"
-gramax-sync clone --section "1-методология"
+uv run gramax-sync status --section "1-*"
+uv run gramax-sync clone --section "1-методология"
 
 # Работа только с определёнными каталогами
-gramax-sync commit --catalog "ritm-*" -m "Fix typos"
+uv run gramax-sync commit --catalog "ritm-*" -m "Fix typos"
 
 # Комбинация фильтров
-gramax-sync pull --section "1-*" --catalog "ritm-methodology"
+uv run gramax-sync pull --section "1-*" --catalog "ritm-methodology"
 ```
 
 ### Управление конфигурацией
 
 ```bash
 # Просмотр текущей конфигурации
-gramax-sync edit show
+uv run gramax-sync edit show
 
 # Изменение директории для репозиториев
-gramax-sync edit set-workspace-dir --workspace-dir ~/my-workspace
+uv run gramax-sync edit set-workspace-dir --workspace-dir ~/my-workspace
 # или интерактивно
-gramax-sync edit set-workspace-dir
+uv run gramax-sync edit set-workspace-dir
 
 # Добавление секции или каталога
-gramax-sync edit add --section "1-методология" --catalog "ritm-methodology"
+uv run gramax-sync edit add --section "1-методология" --catalog "ritm-methodology"
 # или интерактивно
-gramax-sync edit add
+uv run gramax-sync edit add
 
 # Удаление секции или каталога
-gramax-sync edit remove --section "1-методология" --catalog "ritm-methodology"
+uv run gramax-sync edit remove --section "1-методология" --catalog "ritm-methodology"
 
 # Обновление конфигурации с сервера
-gramax-sync update
+uv run gramax-sync update
 ```
 
 ### Аутентификация
@@ -284,7 +240,7 @@ gramax-sync update
 
 3. **Выполните аутентификацию:**
    ```bash
-   gramax-sync auth login --oauth --url https://itsmf.gitlab.yandexcloud.net
+   uv run gramax-sync auth login --oauth --url https://itsmf.gitlab.yandexcloud.net
    ```
 
 Подробная инструкция: [OAUTH_SETUP.md](OAUTH_SETUP.md)
@@ -298,7 +254,7 @@ gramax-sync update
 
 ```bash
 # Войти через Personal Access Token
-gramax-sync auth login --pat --url https://itsmf.gitlab.yandexcloud.net
+uv run gramax-sync auth login --pat --url https://itsmf.gitlab.yandexcloud.net
 ```
 
 **💡 Подробнее:** См. [TOKEN_PERMISSIONS.md](TOKEN_PERMISSIONS.md) для полной информации о настройке прав токена.
@@ -307,13 +263,13 @@ gramax-sync auth login --pat --url https://itsmf.gitlab.yandexcloud.net
 
 ```bash
 # Показать статус аутентификации
-gramax-sync auth status
+uv run gramax-sync auth status
 
 # Обновить токен
-gramax-sync auth refresh
+uv run gramax-sync auth refresh
 
 # Выйти из системы
-gramax-sync auth logout --url https://itsmf.gitlab.yandexcloud.net
+uv run gramax-sync auth logout --url https://itsmf.gitlab.yandexcloud.net
 ```
 
 ## Конфигурация
@@ -339,7 +295,7 @@ sections:
 
 **Директория для репозиториев:**
 - По умолчанию: `~/{name}-workspace` (где `name` — имя проекта из workspace.yaml)
-- Можно изменить: `gramax-sync edit set-workspace-dir`
+- Можно изменить: `uv run gramax-sync edit set-workspace-dir`
 - Структура: `{workspace_dir}/{section}/{catalog}/`
 
 ## Разработка
@@ -349,7 +305,6 @@ sections:
 ```bash
 # Настроить окружение
 make setup
-source .venv/bin/activate
 
 # Запустить тесты
 make test
